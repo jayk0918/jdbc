@@ -71,11 +71,9 @@ public class BookSelectALL {
 			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }else if(bookId == 6 || bookId == 8) {
 			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
-			        }
-			        else {
+			        }else {
 			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }
-			        
 		        }
 		        
 	        }catch(SQLException e) {
