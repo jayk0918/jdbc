@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthorInsert {
+public class BookInsert {
 
 	public static void main(String[] args) {
 		
@@ -36,15 +36,17 @@ public class AuthorInsert {
 	        try {
 	        	 // SQL문 준비
 		        String query = "";
-		        query += " insert into author ";
-		        query += " values(seq_author_id.nextval, ?, ?) ";
+		        query += " insert into book ";
+		        query += " values(seq_book_id.nextval, ?, ?, ?, ?) ";
 		        
 		        System.out.println(query);
 		        
 		        // 바인딩
 		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, "김영하");
-		        pstmt.setString(2, "알쓸신잡");
+		        pstmt.setString(1, "복학왕");
+		        pstmt.setString(2, "지방북스(buks)");
+		        pstmt.setString(3, "22/05/20");
+		        pstmt.setInt(4, 4);
 		        
 		        // 실행
 		        int count = pstmt.executeUpdate();
@@ -75,7 +77,7 @@ public class AuthorInsert {
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
 		}
-	}		
-}			
-	        	
-	        	
+
+	}
+
+}

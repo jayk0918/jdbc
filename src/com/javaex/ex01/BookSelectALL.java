@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthorSelect {
+public class BookSelectALL {
 
 	public static void main(String[] args) {
 		
@@ -33,10 +33,15 @@ public class AuthorSelect {
 	        try {
 	        	 // SQL문 준비
 		        String query = "";
-		        query += " select author_id ";
-		        query += "     ,author_name ";
-		        query += "     ,author_desc ";
-		        query += " from author ";
+		        query += " select b.book_id   book_id ";
+		        query += "     	 ,b.title  title ";
+		        query += "       ,b.pubs pubs ";
+		        query += " 		 ,to_char(b.pub_date, 'YYYY-MM-DD') pub_date ";
+		        query += " 		 ,a.author_id author_id ";
+		        query += " 		 ,a.author_name author_name ";
+		        query += " 		 ,a.author_desc author_desc ";
+		        query += " from author a, book b ";
+		        query += " where a.author_id = b.author_id ";
 		        
 		        System.out.println(query);
 		        
@@ -44,17 +49,27 @@ public class AuthorSelect {
 		        pstmt = conn.prepareStatement(query);
 		       
 		        // 실행
-		        // int count = pstmt.executeUpdate(); -> int값만 return 해줌 / insert, update, delete
 		        rs = pstmt.executeQuery();
 		        
 		        // 결과처리
-		        // rs.next(); // 가상 cursor를 옮기는 작업 (author_id를 1번부터 인식할 수 있도록)
-		        // 언제 끝날지 모르므로 while문으로 결과 return
 		        while(rs.next()) {
-		        	int authorId = rs.getInt(1); // "author_id" 와 같음
-			        String authorName = rs.getString(2); // "author_name"
-			        String authorDesc = rs.getString(3); // "author_desc"
-			        System.out.println(authorId + ", " + authorName + ", " + authorDesc);
+		        	int bookId = rs.getInt(1); 
+			        String title = rs.getString(2);
+			        String pubs = rs.getString(3);
+			        String pubDate = rs.getString(4);
+			        int authorId = rs.getInt(5);
+			        String authorName = rs.getString(6);
+			        String authorDesc = rs.getString(7);
+			        
+			        if(bookId == 1 || bookId == 4) {
+			        	System.out.println(bookId + ", " + title + ", \t" + pubs + ", \t\t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        }else if(bookId == 3 || bookId == 5) {
+			        	System.out.println(bookId + ", " + title + ", \t\t" + pubs + ", \t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        }
+			        else {
+			        	System.out.println(bookId + ", " + title + ", \t\t" + pubs + ", \t\t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        }
+			        
 		        }
 		        
 	        }catch(SQLException e) {
@@ -78,8 +93,7 @@ public class AuthorSelect {
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
 		}
+
 	}
+
 }
-// commit 이슈 발생 : delete랑 insert 진행중에 sql exception : 마지막 행 다음의 결과 집합 오류가 뜸
-//예제 맞추려고 drop table 했다가 재구성했는데, 테이블 상태가 값이 없음을 인식하지 못했음
-//sql developer로 다시 가서 table 값을 다시 세팅하고 commit을 진행하고 eclipse에서 문구를 실행하니 결과값이 출력되었음

@@ -38,7 +38,7 @@ public class AuthorDelete {
 		        
 		        // 바인딩
 		        pstmt = conn.prepareStatement(query);
-		        pstmt.setInt(1, 3);
+		        pstmt.setInt(1, 7);
 		        
 		        // 실행
 		        int count = pstmt.executeUpdate();

@@ -6,17 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthorInsert {
+public class BookSelect {
 
 	public static void main(String[] args) {
-		
+
 		String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
 		String userid = "admin";
 		String pwd = "Jayk09180918";
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 	    
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -27,8 +23,9 @@ public class AuthorInsert {
        
 		try {
 			System.out.println("DB 연결 준비......");
-			conn = DriverManager.getConnection(url, userid, pwd);
-			
+			Connection conn = DriverManager.getConnection(url, userid, pwd);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			if(conn!=null) {
 				System.out.println("DB 연결 성공...");
 			}
@@ -36,23 +33,30 @@ public class AuthorInsert {
 	        try {
 	        	 // SQL문 준비
 		        String query = "";
-		        query += " insert into author ";
-		        query += " values(seq_author_id.nextval, ?, ?) ";
+		        query += " select book_id ";
+		        query += "     	 ,title ";
+		        query += "       ,pubs ";
+		        query += " 		 ,to_char(pub_date, 'YYYY-MM-DD') ";
+		        query += " 		 ,author_id ";
+		        query += " from book ";
 		        
 		        System.out.println(query);
 		        
 		        // 바인딩
 		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, "김영하");
-		        pstmt.setString(2, "알쓸신잡");
-		        
+		       
 		        // 실행
-		        int count = pstmt.executeUpdate();
+		        rs = pstmt.executeQuery();
 		        
-		        // 결과처리보고 
-		        System.out.println(count + "건이 등록되었습니다.");
-		        // update 실행 시 자동 commit, 수정 이전으로 rollback이 불가능함
-		        
+		        // 결과처리
+		        while(rs.next()) {
+		        	int bookId = rs.getInt(1); 
+			        String title = rs.getString(2);
+			        String pubs = rs.getString(3);
+			        String pubDate = rs.getString(4);
+			        int authorId = rs.getInt(5);
+			        System.out.println(bookId + ", " + title + ", " + pubs + ", " + pubDate + ", " + authorId);
+		        }
 		        
 	        }catch(SQLException e) {
 	        	System.out.println("error:" + e);
@@ -61,21 +65,21 @@ public class AuthorInsert {
 	        	try {
 	        		if (rs != null) {
 	        			rs.close();
-						}
+					}
 					if (pstmt != null) {
 						pstmt.close();
-						}
+					}
 					if (conn != null) {
 						conn.close();
-						}
+					}
 				}catch (SQLException e) {
 					System.out.println("error:" + e);
-					}
+				}
 	        }
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
 		}
-	}		
-}			
-	        	
-	        	
+
+	}
+
+}

@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AuthorInsert {
+public class BookUpdate {
 
 	public static void main(String[] args) {
 		
@@ -36,22 +36,23 @@ public class AuthorInsert {
 	        try {
 	        	 // SQL문 준비
 		        String query = "";
-		        query += " insert into author ";
-		        query += " values(seq_author_id.nextval, ?, ?) ";
+		        query += " update book ";
+		        query += " set title = ? ";
+		        query += " , pub_date = ? ";
+		        query += " where book_id = 3 ";
 		        
 		        System.out.println(query);
 		        
 		        // 바인딩
 		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, "김영하");
-		        pstmt.setString(2, "알쓸신잡");
+		        pstmt.setString(1, "부동산");
+		        pstmt.setString(2, "15/04/30");
 		        
 		        // 실행
 		        int count = pstmt.executeUpdate();
 		        
 		        // 결과처리보고 
 		        System.out.println(count + "건이 등록되었습니다.");
-		        // update 실행 시 자동 commit, 수정 이전으로 rollback이 불가능함
 		        
 		        
 	        }catch(SQLException e) {
@@ -75,7 +76,7 @@ public class AuthorInsert {
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
 		}
-	}		
-}			
-	        	
-	        	
+
+	}
+
+}
