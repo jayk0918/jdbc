@@ -79,30 +79,3 @@ public class Authorinsert {
 	        	
 	        	
 	        	
-	        	
-	        
-	       
-	        
-		
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-		
