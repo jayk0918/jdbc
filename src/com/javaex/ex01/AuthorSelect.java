@@ -6,13 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Authorinsert {
+public class AuthorSelect {
 
 	public static void main(String[] args) {
 		
 		String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
 		String userid = "admin";
 		String pwd = "Jayk09180918";
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 	    
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -23,34 +27,35 @@ public class Authorinsert {
        
 		try {
 			System.out.println("DB 연결 준비......");
-			Connection conn = DriverManager.getConnection(url, userid, pwd);
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
+			conn = DriverManager.getConnection(url, userid, pwd);
+			
 			if(conn!=null) {
 				System.out.println("DB 연결 성공...");
 			}
 	        
 	        try {
-	        	 // SQL문 준비 / 바인딩 / 실행
+	        	 // SQL문 준비
 		        String query = "";
-		        query += " insert into author ";
-		        query += " values(seq_author_id.nextval, ?, ?) ";
+		        query += " update author ";
+		        query += " set author_name = ? ";
+		        query += " ,author_desc = ? ";
+		        query += " where author_id = ? ";
 		        
 		        System.out.println(query);
-		        // str을 붙이는 과정에서 띄어쓰기가 무시될 위험성이 높음
-		        // sql문 시작과 끝에 띄어쓰기 값을 강제로 넣음으로써 오류 회피
-		        // ? : ?에 해당하는 자리는 사용자가 제공해야하는 데이터임
-		        // 숫자, 문자열 상관없이 ?로 표기하여야 함 (문법)
 		        
-		        // 문자열을 쿼리로 만들기
+		        // 바인딩
 		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, "이문열");
-		        pstmt.setString(2, "경북 영양");
+		        pstmt.setString(1, "황문열");
+		        pstmt.setString(2, "서울특별시");
+		        pstmt.setInt(3, 1);
 		        
 		        // 실행
 		        int count = pstmt.executeUpdate();
 		        
+		        // 결과처리보고 
 		        System.out.println(count + "건이 등록되었습니다.");
+		        // update 실행 시 자동 commit, 수정 이전으로 rollback이 불가능함
+		        
 		        
 	        }catch(SQLException e) {
 	        	System.out.println("error:" + e);
@@ -73,9 +78,9 @@ public class Authorinsert {
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
 		}
-	}		
-}			
-			
-	        	
-	        	
-	        	
+		
+		
+		
+	}
+
+}
