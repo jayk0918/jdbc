@@ -15,9 +15,8 @@ public class Authorinsert {
 		String pwd = "Jayk09180918";
 	    
 		try {
-			Class.forName("oracle.jdbc.OracleDriver");//
+			Class.forName("oracle.jdbc.OracleDriver");
 			System.out.println("JDBC 드라이버 로딩 성공");
-    	    
 		}catch(ClassNotFoundException e) {
 			System.out.println("error : 드라이버 로딩 실패 - " + e);
 		}
