@@ -90,14 +90,13 @@ public class BookSelectALL {
 	        		if(conn != null) {
 	        			conn.close();
 	        		}
-				}catch (SQLException e) {
-					System.out.println("error:" + e);
-				}
+	        	}catch (SQLException e){
+	        		System.out.println("error:" + e);
+	        	}
 	        }
 		}catch(SQLException e) {
-	    	   System.out.println("error" + e);
+			System.out.println("error" + e);
 		}
 
 	}
-
 }
