@@ -29,9 +29,8 @@ public class BookSelectALL {
 			if(conn!=null) {
 				System.out.println("DB 연결 성공...");
 			}
-	        
-	        try {
-	        	// SQL문 준비
+			try {
+				// SQL문 준비
 		        String query = "";
 		        query += " select b.book_id   book_id ";
 		        query += "     	 ,b.title  title ";
@@ -75,7 +74,6 @@ public class BookSelectALL {
 			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }
 		        }
-		        
 	        }catch(SQLException e) {
 	        	System.out.println("error:" + e);
 	        }finally {
@@ -93,10 +91,9 @@ public class BookSelectALL {
 	        	}catch (SQLException e){
 	        		System.out.println("error:" + e);
 	        	}
-	        }
-		}catch(SQLException e) {
-			System.out.println("error" + e);
-		}
-
-	}
-}
+			}
+		}catch (SQLException e){
+    		System.out.println("error:" + e);
+    	}
+	}// main
+}// class
