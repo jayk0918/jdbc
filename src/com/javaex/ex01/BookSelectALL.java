@@ -31,7 +31,7 @@ public class BookSelectALL {
 			}
 	        
 	        try {
-	        	 // SQL문 준비
+	        	// SQL문 준비
 		        String query = "";
 		        query += " select b.book_id   book_id ";
 		        query += "     	 ,b.title  title ";
@@ -81,15 +81,15 @@ public class BookSelectALL {
 	        }finally {
 	        	// 자원 정리
 	        	try {
-	        		if (rs != null) {
+	        		if(rs != null) {
 	        			rs.close();
-					}
-					if (pstmt != null) {
-						pstmt.close();
-					}
-					if (conn != null) {
-						conn.close();
-					}
+	        		}
+	        		if(pstmt != null) {
+	        			pstmt.close();
+	        		}
+	        		if(conn != null) {
+	        			conn.close();
+	        		}
 				}catch (SQLException e) {
 					System.out.println("error:" + e);
 				}
