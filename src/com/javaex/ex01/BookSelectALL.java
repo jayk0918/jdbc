@@ -52,6 +52,8 @@ public class BookSelectALL {
 		        rs = pstmt.executeQuery();
 		        
 		        // 결과처리
+		        
+		        System.out.println("book_id \t     title \t\tpubs \t\t pub_date   author_id \t author_name \t author_desc");
 		        while(rs.next()) {
 		        	int bookId = rs.getInt(1); 
 			        String title = rs.getString(2);
@@ -62,12 +64,16 @@ public class BookSelectALL {
 			        String authorDesc = rs.getString(7);
 			        
 			        if(bookId == 1 || bookId == 4) {
-			        	System.out.println(bookId + ", " + title + ", \t" + pubs + ", \t\t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        	System.out.println("   " + bookId + "\t\t" + title + "  \t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }else if(bookId == 3 || bookId == 5) {
-			        	System.out.println(bookId + ", " + title + ", \t\t" + pubs + ", \t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
+			        }else if(bookId == 7) {
+			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
+			        }else if(bookId == 6 || bookId == 8) {
+			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }
 			        else {
-			        	System.out.println(bookId + ", " + title + ", \t\t" + pubs + ", \t\t" + pubDate + ",  " + authorId + ",  " + authorName + ", \t" + authorDesc);
+			        	System.out.println("   " + bookId + "\t\t" + title + "  \t\t\t" + pubs + "  \t\t" + pubDate + "   \t" + authorId + "   \t     " + authorName + "  \t  " + authorDesc);
 			        }
 			        
 		        }
