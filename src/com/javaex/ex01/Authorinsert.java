@@ -15,21 +15,21 @@ public class Authorinsert {
 		String pwd = "Jayk09180918";
 	    
 		try {
-    	    Class.forName("oracle.jdbc.OracleDriver");//
-    	    System.out.println("JDBC 드라이버 로딩 성공");
+			Class.forName("oracle.jdbc.OracleDriver");//
+			System.out.println("JDBC 드라이버 로딩 성공");
     	    
 		}catch(ClassNotFoundException e) {
-    	    System.out.println("error : 드라이버 로딩 실패 - " + e);
+			System.out.println("error : 드라이버 로딩 실패 - " + e);
 		}
        
 		try {
-	        System.out.println("DB 연결 준비......");
-	        Connection conn = DriverManager.getConnection(url, userid, pwd);
-	        PreparedStatement pstmt = null;
-	        ResultSet rs = null;
-	        if(conn!=null) {
-	    	    System.out.println("DB 연결 성공...");
-	        }
+			System.out.println("DB 연결 준비......");
+			Connection conn = DriverManager.getConnection(url, userid, pwd);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			if(conn!=null) {
+				System.out.println("DB 연결 성공...");
+			}
 	        
 	        try {
 	        	 // SQL문 준비 / 바인딩 / 실행
@@ -58,17 +58,18 @@ public class Authorinsert {
 	        }finally {
 	        	// 자원 정리
 	        	try {
-					if (rs != null) {
-					rs.close();
-					}
+	        		if (rs != null) {
+	        			rs.close();
+						}
 					if (pstmt != null) {
-					pstmt.close();
-					}
+						pstmt.close();
+						}
 					if (conn != null) {
-					conn.close();
-					}
+						conn.close();
+						}
 				}catch (SQLException e) {
-					System.out.println("error:" + e); }
+					System.out.println("error:" + e);
+					}
 	        }
 		}catch(SQLException e) {
 	    	   System.out.println("error" + e);
