@@ -13,58 +13,58 @@ public class BookSelect {
 		String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
 		String userid = "admin";
 		String pwd = "Jayk09180918";
-	    
+
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 			System.out.println("JDBC 드라이버 로딩 성공");
-		}catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			System.out.println("error : 드라이버 로딩 실패 - " + e);
 		}
-       
+
 		try {
 			System.out.println("DB 연결 준비......");
 			Connection conn = DriverManager.getConnection(url, userid, pwd);
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
-			if(conn!=null) {
+			if (conn != null) {
 				System.out.println("DB 연결 성공...");
 			}
-	        
-	        try {
-	        	 // SQL문 준비
-		        String query = "";
-		        query += " select book_id ";
-		        query += "     	 ,title ";
-		        query += "       ,pubs ";
-		        query += " 		 ,to_char(pub_date, 'YYYY-MM-DD') ";
-		        query += " 		 ,author_id ";
-		        query += " from book ";
-		        
-		        System.out.println(query);
-		        
-		        // 바인딩
-		        pstmt = conn.prepareStatement(query);
-		       
-		        // 실행
-		        rs = pstmt.executeQuery();
-		        
-		        // 결과처리
-		        while(rs.next()) {
-		        	int bookId = rs.getInt(1); 
-			        String title = rs.getString(2);
-			        String pubs = rs.getString(3);
-			        String pubDate = rs.getString(4);
-			        int authorId = rs.getInt(5);
-			        System.out.println(bookId + ", " + title + ", " + pubs + ", " + pubDate + ", " + authorId);
-		        }
-		        
-	        }catch(SQLException e) {
-	        	System.out.println("error:" + e);
-	        }finally {
-	        	// 자원 정리
-	        	try {
-	        		if (rs != null) {
-	        			rs.close();
+
+			try {
+				// SQL문 준비
+				String query = "";
+				query += " select book_id ";
+				query += "     	 ,title ";
+				query += "       ,pubs ";
+				query += " 		 ,to_char(pub_date, 'YYYY-MM-DD') ";
+				query += " 		 ,author_id ";
+				query += " from book ";
+
+				System.out.println(query);
+
+				// 바인딩
+				pstmt = conn.prepareStatement(query);
+
+				// 실행
+				rs = pstmt.executeQuery();
+
+				// 결과처리
+				while (rs.next()) {
+					int bookId = rs.getInt(1);
+					String title = rs.getString(2);
+					String pubs = rs.getString(3);
+					String pubDate = rs.getString(4);
+					int authorId = rs.getInt(5);
+					System.out.println(bookId + ", " + title + ", " + pubs + ", " + pubDate + ", " + authorId);
+				}
+
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			} finally {
+				// 자원 정리
+				try {
+					if (rs != null) {
+						rs.close();
 					}
 					if (pstmt != null) {
 						pstmt.close();
@@ -72,12 +72,12 @@ public class BookSelect {
 					if (conn != null) {
 						conn.close();
 					}
-				}catch (SQLException e) {
+				} catch (SQLException e) {
 					System.out.println("error:" + e);
 				}
-	        }
-		}catch(SQLException e) {
-	    	   System.out.println("error" + e);
+			}
+		} catch (SQLException e) {
+			System.out.println("error" + e);
 		}
 
 	}
