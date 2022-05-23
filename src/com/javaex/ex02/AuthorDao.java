@@ -88,9 +88,6 @@ public class AuthorDao {
 		return count;
 	}
 	
-	
-	
-	
 	//////////////////authorDelete //////////////////
 	public int authorDelete(int authorId) {
 		int count = -1;
