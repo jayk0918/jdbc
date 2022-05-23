@@ -1,7 +1,6 @@
-package com.javaex.ex02;
+package com.javaex.ex03;
 
-public class BookVo	{
-	
+public class BookVo {
 	// 필드
 	private int bookId;
 	private String title;
@@ -30,9 +29,11 @@ public class BookVo	{
 	}
 	
 	// gs
+	
 	public int getBookId() {
 		return bookId;
 	}
+	
 
 	public void setBookId(int bookId) {
 		this.bookId = bookId;
@@ -44,14 +45,6 @@ public class BookVo	{
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	public String getAuthorName() {
-		return authorName;
-	}
-
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
 	}
 
 	public String getPubs() {
@@ -78,12 +71,23 @@ public class BookVo	{
 		this.authorId = authorId;
 	}
 
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
 	
 	// 일반
 	@Override
 	public String toString() {
 		return "BookVo [bookId=" + bookId + ", title=" + title + ", pubs=" + pubs + ", pubDate=" + pubDate
-				+ ", authorId=" + authorId + "]";
+				+ ", authorId=" + authorId + ", authorName=" + authorName + "]";
 	}
+	
+	
+	
 	
 }

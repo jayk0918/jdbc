@@ -1,4 +1,4 @@
-package com.javaex.ex02;
+package com.javaex.ex03;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,13 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BookDao {
-
-	// 필드
-	// 생성자
-	// gs
-	// 일반
-
+	
 	// insert
 	public int bookInsert(String title, String pubs, String pubDate, int authorId) {
 		int count = -1;
@@ -216,7 +212,6 @@ public class BookDao {
 	}
 	
 	// select
-	
 	public List<BookVo> bookSelect(){
 		String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
 		String userid = "admin";
@@ -270,7 +265,6 @@ public class BookDao {
 					BookVo bookVo = new BookVo(bookId, title, pubs, pubDate, authorId);
 					bookList.add(bookVo);
 				}
-				// System.out.println(authorList.toString());
 
 			} catch (SQLException e) {
 				System.out.println("error:" + e);
@@ -295,7 +289,6 @@ public class BookDao {
 		}
 		return bookList;
 	}
-	
 	
 	// table join
 	public List<BookVo> bookJoin(){
@@ -378,5 +371,93 @@ public class BookDao {
 		return bookList;
 	}
 	
+	
+	
+	// search
+	public List<BookVo> bookSearch(String search){
+		String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
+		String userid = "admin";
+		String pwd = "Jayk09180918";
+		List<BookVo> bookList = new ArrayList<BookVo>();
+		
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+			System.out.println("JDBC 드라이버 로딩 성공");
+		} catch (ClassNotFoundException e) {
+			System.out.println("error : 드라이버 로딩 실패 - " + e);
+		}
 
+		try {
+			System.out.println("DB 연결 준비......");
+			Connection conn = DriverManager.getConnection(url, userid, pwd);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			if (conn != null) {
+				System.out.println("DB 연결 성공...");
+			}
+
+			try {
+				// SQL문 준비
+				String query = "";
+				query += " select b.book_id  book_id ";
+				query += "     	 ,b.title  title ";
+				query += "       ,b.pubs pubs ";
+				query += "       ,to_char(b.pub_date, 'YYYY-MM-DD') pub_date ";
+				query += "       ,a.author_name  author_name ";
+				query += " from  author a, book b ";
+				query += " where a.author_id = b.author_id ";
+				query += " and (    b.title       like ?  ";
+				query += " 	     or b.pubs        like ?  ";
+				query += " 	     or a.author_name like ? ) ";
+
+				System.out.println(query);
+
+				// 바인딩
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, "%" + search + "%");
+				pstmt.setString(2, "%" + search + "%");
+				pstmt.setString(3, "%" + search + "%");
+				
+				// 실행
+				rs = pstmt.executeQuery();
+
+				// 결과처리 (리스트 만들기)
+				// Vo만들고 list에 추가(반복)
+				while(rs.next()) {
+					int bookId = rs.getInt("book_id");
+					String title = rs.getString("title");
+					String pubs = rs.getString("pubs");
+					String pubDate = rs.getString("pub_date");
+					String authorName= rs.getString("author_name");
+					
+					BookVo bookVo = new BookVo(bookId, title, pubs, pubDate, authorName);
+					bookList.add(bookVo);
+				}
+				// System.out.println(authorList.toString());
+
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			} finally {
+				// 자원 정리
+				try {
+					if (rs != null) {
+						rs.close();
+					}
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					System.out.println("error:" + e);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("error" + e);
+		}
+		return bookList;
+	}
+	
+	
 }
