@@ -1,0 +1,259 @@
+package com.javaex.ex04;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookDao {
+
+	// 필드
+	private String url = "jdbc:oracle:thin:@webdb_high?TNS_ADMIN=/Users/jaykim0918/Dropbox/Wallet_webdb";
+	private String id = "admin";
+	private String pw = "Jayk09180918";
+	private String driver = "oracle.jdbc.OracleDriver";
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+
+	// 생성자
+	// gs
+	// 일반
+
+	// connection
+	public void getConnection() {
+		try {
+			Class.forName(driver);
+			System.out.println("JDBC 드라이버 로딩 성공");
+			System.out.println("DB 연결 준비......");
+			conn = DriverManager.getConnection(url, id, pw);
+			if (conn != null) {
+				System.out.println("DB 연결 성공...");
+			}
+
+		} catch (ClassNotFoundException e) {
+			System.out.println("error : 드라이버 로딩 실패 - " + e);
+		} catch (SQLException e) {
+			System.out.println("error" + e);
+		}
+	}
+
+	// close
+	public void close() {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+	}
+
+	// insert
+	public int bookInsert(BookVo bookVo) {
+		int count = -1;
+
+		getConnection();
+
+		try {
+			// SQL문 준비
+			String query = "";
+			query += " insert into book ";
+			query += " values(seq_book_id.nextval, ?, ?, ?, ?) ";
+
+			System.out.println(query);
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, bookVo.getTitle());
+			pstmt.setString(2, bookVo.getPubs());
+			pstmt.setString(3, bookVo.getPubDate());
+			pstmt.setInt(4, bookVo.getAuthorId());
+
+			// 실행
+			count = pstmt.executeUpdate();
+
+			// 결과처리보고
+			// System.out.println(count + "건이 등록되었습니다.");
+			// 메소드의 return 값을 int로 설정하여 결과를 받아볼 수 있음
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		close();
+
+		return count;
+	}
+
+	// delete
+	public int bookDelete(BookVo bookVo) {
+		int count = -1;
+		getConnection();
+
+		try {
+			// SQL문 준비
+			String query = "";
+			query += " delete from book ";
+			query += " where book_id = ? ";
+
+			System.out.println(query);
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, bookVo.getBookId());
+
+			// 실행
+			count = pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		close();
+		return count;
+	}
+
+	// update
+	public int bookUpdate(BookVo bookVo) {
+		int count = -1;
+		getConnection();
+
+		try {
+			// SQL문 준비
+			String query = "";
+			query += " update book ";
+			query += " set title = ? ";
+			query += "     ,pubs = ? ";
+			query += "     ,pub_date = ? ";
+			query += "     ,author_id = ? ";
+			query += " where book_id = ? ";
+
+			System.out.println(query);
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, bookVo.getTitle());
+			pstmt.setString(2, bookVo.getPubs());
+			pstmt.setString(3, bookVo.getPubDate());
+			pstmt.setInt(4, bookVo.getAuthorId());
+			pstmt.setInt(5, bookVo.getBookId());
+
+			// 실행
+			count = pstmt.executeUpdate();
+
+			// 결과처리보고
+			System.out.println(count + "건이 수정되었습니다.");
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		close();
+		return count;
+	}
+
+	// select
+
+	public List<BookVo> bookSelect() {
+		List<BookVo> bookList = new ArrayList<BookVo>();
+
+		getConnection();
+
+		try {
+			// SQL문 준비
+			String query = "";
+			query += " select book_id ";
+			query += "     	 ,title ";
+			query += "       ,pubs ";
+			query += "       ,to_char(pub_date, 'YYYY-MM-DD') pub_date ";
+			query += "       ,author_id ";
+			query += " from book ";
+			query += " order by book_id asc ";
+
+			System.out.println(query);
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+
+			// 실행
+			rs = pstmt.executeQuery();
+
+			// 결과처리 (리스트 만들기)
+			// Vo만들고 list에 추가(반복)
+			while (rs.next()) {
+				int bookId = rs.getInt("book_id");
+				String title = rs.getString("title");
+				String pubs = rs.getString("pubs");
+				String pubDate = rs.getString("pub_date");
+				int authorId = rs.getInt("author_id");
+
+				BookVo bookVo = new BookVo(bookId, title, pubs, pubDate, authorId);
+				bookList.add(bookVo);
+			}
+			// System.out.println(authorList.toString());
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		close();
+		return bookList;
+	}
+
+	// table join
+	public List<BookVo> bookJoin() {
+		List<BookVo> bookList = new ArrayList<BookVo>();
+
+		getConnection();
+
+		try {
+			// SQL문 준비
+			String query = "";
+			query += " select b.book_id  book_id ";
+			query += "     	 ,b.title  title ";
+			query += "       ,b.pubs pubs ";
+			query += "       ,to_char(b.pub_date, 'YYYY-MM-DD') pub_date ";
+			query += "       ,a.author_name  author_name ";
+			query += " from author a, book b ";
+			query += " where a.author_id = b.author_id ";
+
+			System.out.println(query);
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+
+			// 실행
+			rs = pstmt.executeQuery();
+
+			// 결과처리 (리스트 만들기)
+			// Vo만들고 list에 추가(반복)
+			while (rs.next()) {
+				int bookId = rs.getInt("book_id");
+				String title = rs.getString("title");
+				String pubs = rs.getString("pubs");
+				String pubDate = rs.getString("pub_date");
+				String authorName = rs.getString("author_name");
+
+				BookVo bookVo = new BookVo(bookId, title, pubs, pubDate, authorName);
+				bookList.add(bookVo);
+			}
+			// System.out.println(authorList.toString());
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		close();
+
+		return bookList;
+	}
+
+}
